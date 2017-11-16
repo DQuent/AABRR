@@ -12,18 +12,21 @@ public class ABR_Reverse {
 		this.valeur = valeur;
 		SaG = saG;
 		SaD = saD;
-		if(SaG == null && SaD == null){
-			this.is_vide= true;
-		}
-		else{
-			this.is_vide = false;
-		}
-		
+		this.is_vide = false;
 	}
 	
-	//Constructeur 2
+	//Constructeur 1
 	public ABR_Reverse(int valeur) {
 		this.valeur = valeur;
+		SaG = new ABR_Reverse();
+		SaD = new ABR_Reverse();
+		this.is_vide = false;
+	}
+	
+	
+	//Constructeur 2
+	public ABR_Reverse() {
+		this.valeur = -1; 
 		SaG = null;
 		SaD = null;
 		this.is_vide= true;
@@ -98,12 +101,14 @@ public class ABR_Reverse {
 	}
 	
 	
-	public void Affichage(){
+	public String Affichage(){
+		String result = "";
 		if(!this.is_vide && this.SaG != null && this.SaD != null){
-			this.SaG.Affichage();
-			System.out.println(" "+this.valeur);
-			this.SaD.Affichage();
+			result = result+" "+ this.valeur;
+			result = this.SaG.Affichage();
+			result = this.SaD.Affichage();
 		}
+		return result;
 	}
 	
 	
