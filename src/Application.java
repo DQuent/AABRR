@@ -12,15 +12,11 @@ public class Application {
 		a.Ajouter(4);
 		a.Ajouter(5);
 		a.Ajouter(30);
-		//a.Ajouter(25);
-
+		a.Ajouter(25);
+	
+		a.Supprimer(4);
 		System.out.println(a.Affichage());
-		/*System.out.println("\n");
-		a.Supprimer(15);
-		a.Affichage();
-		System.out.println("");
-		a.Supprimer(10);
-		a.Affichage();*/
+
 
 	}
 
