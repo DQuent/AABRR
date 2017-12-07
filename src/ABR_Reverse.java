@@ -102,13 +102,17 @@ public class ABR_Reverse {
 	
 	
 	public String Affichage(){
-		String result = "";
-		if(!this.is_vide && this.SaG != null && this.SaD != null){
-			result = result+" "+ this.valeur;
-			result = this.SaG.Affichage();
-			result = this.SaD.Affichage();
+		String s ="";
+		if(!this.is_vide ){
+			if(this.SaG!=null && !this.SaG.is_vide){
+				s += this.SaG.Affichage();
+			}
+			s += this.valeur+"|";
+			if(this.SaG!=null && !this.SaD.is_vide){
+				s += this.SaD.Affichage();
+			}
 		}
-		return result;
+		return s;
 	}
 	
 	
