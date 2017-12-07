@@ -33,15 +33,19 @@ public class ABR_Reverse {
 	}
 	
 	public void Ajouter(int val){
-		if(is_vide){
+		if(this.is_vide){
 			this.valeur = val;
 			this.is_vide = false;
+			this.SaD = new ABR_Reverse();
+			this.SaG = new ABR_Reverse();
 		}
 		else{
-			if(val <= this.valeur){
+			if(val <= this.valeur && this.SaD!=null){
+				System.out.println("Ajout SaD");
 				this.SaD.Ajouter(val);
 			}
-			else if(val > this.valeur){
+			else if(val > this.valeur && this.SaG!=null){
+				System.out.println("Ajout SaG");
 				this.SaG.Ajouter(val);
 			}
 		}
@@ -105,10 +109,12 @@ public class ABR_Reverse {
 		String s ="";
 		if(!this.is_vide ){
 			if(this.SaG!=null && !this.SaG.is_vide){
+				s += "\n";
 				s += this.SaG.Affichage();
 			}
 			s += this.valeur+"|";
 			if(this.SaG!=null && !this.SaD.is_vide){
+				s += "\n";
 				s += this.SaD.Affichage();
 			}
 		}

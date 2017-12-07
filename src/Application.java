@@ -11,7 +11,7 @@ public class Application {
 		a.Ajouter(15);
 		a.Ajouter(4);
 		a.Ajouter(5);
-		//a.Ajouter(30);
+		a.Ajouter(30);
 		//a.Ajouter(25);
 
 		System.out.println(a.Affichage());
