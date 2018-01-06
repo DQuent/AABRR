@@ -42,11 +42,9 @@ public class ABR_Reverse {
 		}
 		else{
 			if(val <= this.valeur && this.SaD!=null){
-				System.out.println("Ajout SaD");
 				this.SaD.Ajouter(val);
 			}
 			else if(val > this.valeur && this.SaG!=null){
-				System.out.println("Ajout SaG");
 				this.SaG.Ajouter(val);
 			}
 		}
@@ -59,29 +57,35 @@ public class ABR_Reverse {
 		this.SaD = abr.SaD;
 	}
 	
-	public void Supprimer(int val){
+	//renvoie true si la suppression a été effectué, false sinon
+	public boolean Supprimer(int val){
 		int y;
+		boolean result = false;
 		if(!is_vide){
 			if(val < this.valeur){
-				this.SaD.Supprimer(val);
+				result = this.SaD.Supprimer(val);
 			}
 			//si égalité
 			else{
 				if(val > this.valeur){
-					this.SaG.Supprimer(val);
+					result = this.SaG.Supprimer(val);
 				}
-				//on a trouver le noued a supprimer
+				//on a trouver le noeud a supprimer
 				else if(this.SaD.is_vide){
 					this.Recopie(this.SaG);
+					result = true;
 				}
 				else if(this.SaG.is_vide){
 					this.Recopie(this.SaD);
+					result = true;
 				}
 				else{
 					this.valeur = this.SaD.ExtraireMax();
+					return true;
 				}
 			}
 		}
+			return result;
 	}
 	
 	//extraire la valeur maximum du fils gauche
@@ -106,22 +110,35 @@ public class ABR_Reverse {
 	}
 	
 	
-	public String Affichage(){
+	public String AffichageInfixe(){
 		String s ="";
 		if(!this.is_vide ){
 			if(this.SaG!=null && !this.SaG.is_vide){
 				s += "\n";
-				s += this.SaG.Affichage();
+				s += this.SaG.AffichageInfixe();
 			}
 			s += this.valeur+"|";
 			if(this.SaG!=null && !this.SaD.is_vide){
 				s += "\n";
-				s += this.SaD.Affichage();
+				s += this.SaD.AffichageInfixe();
 			}
 		}
 		return s;
 	}
 	
+	public String AffichagePrefixe(){
+		String s ="";
+		s += this.valeur+":";
+		if(!this.is_vide ){
+			if(this.SaG!=null && !this.SaG.is_vide){
+				s += this.SaG.AffichagePrefixe();
+			}
+			if(this.SaG!=null && !this.SaD.is_vide){
+				s += this.SaD.AffichagePrefixe();
+			}
+		}
+		return s;
+	}
 	
 	
 	
