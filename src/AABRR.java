@@ -1,3 +1,11 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
 
 public class AABRR {
 
@@ -10,6 +18,13 @@ public class AABRR {
 	private AABRR SaG;
 	private AABRR SaD;
 	
+	
+	//Constructeur 0
+	public AABRR() {
+		this.noeud = new Noeud_AABRR();
+		this.SaD =null;
+		this.SaG = null;
+	}
 	
 	//Constructeur 1
 	public AABRR(int m,int M) {
@@ -94,6 +109,7 @@ public class AABRR {
 			if (n.min > this.noeud.min) {
 				if (this.SaD == null) {
 					this.SaD = new AABRR(n.min, n.max);
+					this.SaD.noeud.abr = n.abr;
 					return true;
 				} else {
 					return this.SaD.AjouterNoeud(n);
@@ -101,6 +117,7 @@ public class AABRR {
 			} else if (n.min < this.noeud.min) {
 				if (this.SaG == null) {
 					this.SaG = new AABRR(n.min, n.max);
+					this.SaG.noeud.abr = n.abr;
 					return true;
 				} else {
 					return this.SaG.AjouterNoeud(n);
@@ -142,6 +159,88 @@ public class AABRR {
 			}	
 		}
 	}
+	
+	public void SaveAABRR(String name, String folder){
+		try {
+			  File file = new File(folder+"/"+name);
+			    if (file.exists() && file.isDirectory() ) {
+			         /* chemin est correct */
+			    	BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+			    	writer.write(this.Affichage());
+			    	writer.close();
+			    } else {
+			    	BufferedWriter writer = new BufferedWriter(new FileWriter(new File( "/home/delanou/workspace/AABRR/AABRR/Folder_output"+"/"+name)));
+			    	writer.write(this.Affichage());
+			    	writer.close();
+			    	
+			    }	
+			}
+			catch (IOException e)
+			{
+			e.printStackTrace();
+			}
+	}
+	
+	public AABRR CreateAABRRfromFile(String name, String folder) throws IOException{
+		BufferedReader br;
+		AABRR result = new AABRR();
+		
+		br = new BufferedReader(new FileReader(new File(folder+'/'+name)));
+		String line;
+		String[] s_noeud;
+		String[] s_min_max;
+		String[] s_liste_noeud_abrr;
+		while ((line = br.readLine()) != null) {
+			
+			s_noeud = line.split(";");
+			s_min_max = s_noeud[0].split(":");
+			Noeud_AABRR tmp_noeud = new Noeud_AABRR(Integer.parseInt(s_min_max[0]),Integer.parseInt(s_min_max[1]));
+			
+			s_liste_noeud_abrr = s_noeud[1].split(":");	
+			for(int i=0;i<s_liste_noeud_abrr.length;i++){
+				tmp_noeud.Ajouter(Integer.parseInt(s_liste_noeud_abrr[i]));
+			}
+			if(result.noeud.min == -1 && result.noeud.max == -1){
+				result.noeud = tmp_noeud;
+			}
+			result.AjouterNoeud(tmp_noeud);
+		}
+		br.close();
+		return result;
+	}
+	
+	public boolean Search(int val){
+		boolean result = false;
+		if(val >= this.noeud.min){
+			if(val < this.noeud.max){
+				if(this.noeud.Search(val)){
+					result = true;
+				}
+				else{
+					result= false;
+				}
+			}
+			else {
+				if(this.SaD != null){
+					result = this.SaD.Search(val);
+				}
+				else{
+					System.out.println("Aucun interval ne contient la valeur");
+				}
+				
+			}
+		}
+		else if(val<this.noeud.min){
+			if(this.SaG != null){
+				result= this.SaG.Search(val);
+			}
+			else{
+				System.out.println("Aucun interval de contient la valeur");
+			}	
+		}
+		return result;
+	}
+	
 	
 	//affichage prefixe
 	public String Affichage(){

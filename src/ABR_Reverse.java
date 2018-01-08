@@ -59,7 +59,6 @@ public class ABR_Reverse {
 	
 	//renvoie true si la suppression a été effectué, false sinon
 	public boolean Supprimer(int val){
-		int y;
 		boolean result = false;
 		if(!is_vide){
 			if(val < this.valeur){
@@ -142,7 +141,6 @@ public class ABR_Reverse {
 	
 	
 	
-	
 	//Getter and Setter
 	public int getValeur() {
 		return valeur;
@@ -161,6 +159,26 @@ public class ABR_Reverse {
 	}
 	public void setSaD(ABR_Reverse saD) {
 		SaD = saD;
+	}
+
+	public boolean Search(int val) {
+		boolean result = false;
+		if(!is_vide){
+			if(val < this.valeur){
+				result = this.SaD.Search(val);
+			}
+			//si égalité
+			else{
+				if(val > this.valeur){
+					result = this.SaG.Search(val);
+				}
+				//on a trouver le noeud a supprimer
+				else{
+					result = true;
+				}
+			}
+		}
+		return result;
 	}	
 
 

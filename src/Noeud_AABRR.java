@@ -6,6 +6,11 @@ public class Noeud_AABRR {
 	int max; //exclu
 	ABR_Reverse abr; 
 	
+	public Noeud_AABRR(){
+		this.min = -1;
+		this.max = -1;
+		this.abr = new ABR_Reverse();
+	}
 	
 	public Noeud_AABRR(int m, int M){
 		if(m < M){
@@ -49,6 +54,17 @@ public class Noeud_AABRR {
 	public String AfficherNoeud(){
 		String s = String.valueOf(this.min)+':'+String.valueOf(this.max)+';'+this.abr.AffichagePrefixe();
 		return s.substring(0, s.length() - 1);
+	}
+	
+	public boolean is_ABRR(){
+		boolean result = true;
+		
+		return result;
+		
+	}
+
+	public boolean Search(int val) {
+		return this.abr.Search(val);
 	}
 
 }
