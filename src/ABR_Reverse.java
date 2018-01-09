@@ -1,3 +1,6 @@
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 
 public class ABR_Reverse {
 	
@@ -88,7 +91,7 @@ public class ABR_Reverse {
 	}
 	
 	//extraire la valeur maximum du fils gauche
-	private int ExtraireMax() {
+	public int ExtraireMax() {
 		if(this.SaG.is_vide){
 			int result= this.valeur;
 			this.Recopie(this.SaD);
@@ -96,6 +99,28 @@ public class ABR_Reverse {
 		}
 		else{
 			return this.SaG.ExtraireMax();
+		}
+	}
+	
+	//extraire la valeur minimum du fils gauche d'un ABR
+	public int getMinABR() {
+		if(this.SaG.is_vide){
+			int result= this.valeur;
+			return result;
+		}
+		else{
+			return this.SaG.getMinABR();
+		}
+	}
+	
+	//extraire la valeur minimum du fils gauche d'un ABR
+	public int getMaxABR() {
+		if(this.SaD.is_vide){
+			int result= this.valeur;
+			return result;
+		}
+		else{
+			return this.SaD.getMaxABR();
 		}
 	}
 
@@ -180,8 +205,41 @@ public class ABR_Reverse {
 		}
 		return result;
 	}	
-
-
-
-
+/*
+	public AABRR ABRtoAABRR(int k){
+		AABRR result = new AABRR();
+		int min = this.getMaxABR();
+		int max = this.getMinABR();
+		int taille_interval = (max-min)/k;
+		int tmp_min = min;
+		for(int i=0;i<k;i++){		
+			Noeud_AABRR tmp_n = new Noeud_AABRR(tmp_min,tmp_min+taille_interval);
+			//parcours arbre
+			
+			//
+		}
+		
+		return result;
+		
+	}
+	
+	
+	
+	//va ajouter dans result
+	public String checkInterval(int min, int max,int taille_interval, String result){
+		if(!is_vide){
+			if(min >= this.valeur && this.valeur < max){
+				result += this.valeur+';';
+				
+				
+			}
+			else if(this.valeur >= max){
+				result = this.SaD.checkInterval(max+1, max+taille_interval,taille_interval, result);
+			}
+			else{
+				result = this.SaG.checkInterval(max+1, max+taille_interval,taille_interval, result);
+			}
+		}
+		return result;
+	}*/
 }

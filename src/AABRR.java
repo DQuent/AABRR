@@ -242,6 +242,30 @@ public class AABRR {
 	}
 	
 	
+	public Noeud_AABRR getNoeud() {
+		return noeud;
+	}
+
+	public void setNoeud(Noeud_AABRR noeud) {
+		this.noeud = noeud;
+	}
+
+	public AABRR getSaG() {
+		return SaG;
+	}
+
+	public void setSaG(AABRR saG) {
+		SaG = saG;
+	}
+
+	public AABRR getSaD() {
+		return SaD;
+	}
+
+	public void setSaD(AABRR saD) {
+		SaD = saD;
+	}
+
 	//affichage prefixe
 	public String Affichage(){
 		String s ="";
