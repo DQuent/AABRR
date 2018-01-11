@@ -223,7 +223,12 @@ public class ABR {
 		AABRR result = new AABRR();
 		Integer min = this.getMaxABR();
 		Integer max = this.getMinABR();
-		int taille_Interval = (max.intValue()-min.intValue())/k;
+		
+		Float f =  (float) Math.ceil((max.intValue()-min.intValue())/k);
+		int taille_Interval= f.intValue() + 1;
+		
+		 
+		System.out.println(String.valueOf(taille_Interval));
 		int tmp_min = min.intValue();
 		String s_tmp = this.AffichageInfixe();
 		String[] tab_valeurs = s_tmp.substring(0, s_tmp.length() - 1).split(":");

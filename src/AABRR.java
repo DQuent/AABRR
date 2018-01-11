@@ -215,6 +215,9 @@ public class AABRR {
 	}
 	
 	public boolean Is_AABRR_correct(){
+		System.out.println("AABRR est un ABR sur min et leurs valeurs sont comprises entre min et Max :" +String.valueOf(this.is_ABR_sur_min()));
+		System.out.println("AABRR ne comporte aucun noeud disjoint :" +String.valueOf(!this.is_ToutNoeudJoint()));
+		System.out.println("Tout les arbres des noeuds de l'AABRR sont des ABR:" +String.valueOf(this.is_ToutNoeudIsABR()));
 		return this.is_ABR_sur_min() && !this.is_ToutNoeudJoint() && is_ToutNoeudIsABR();
 	}
 	
@@ -306,11 +309,11 @@ public class AABRR {
 	public String SousFonctionAffichageInfixeSurMin(){
 		String s ="";
 		if(this.SaG!=null ){
-			s += this.SaG.AffichageInfixeSurMin();
+			s += this.SaG.SousFonctionAffichageInfixeSurMin();
 		}
 		s += this.noeud.getMin()+":";
 		if(this.SaD!=null){
-			s += this.SaD.AffichageInfixeSurMin();
+			s += this.SaD.SousFonctionAffichageInfixeSurMin();
 		}
 		return s;
 	}
@@ -318,10 +321,12 @@ public class AABRR {
 	public boolean is_ABR_sur_min() {
 		String s = this.AffichageInfixeSurMin();
 		String[] s_tab = s.split(":");
-		int[] i_tab = new int[s_tab.length];;
+		int[] i_tab = new int[s_tab.length];
 		
-		for(int i=0;i<s_tab.length-1;i++){
+		for(int i=0;i<s_tab.length;i++){
 			i_tab[i] = Integer.parseInt(s_tab[i]);
+		}
+		for(int i=0;i<i_tab.length-1;i++){
 			if(i_tab[i]>i_tab[i+1]){
 				return false;
 			}
@@ -465,28 +470,6 @@ public class AABRR {
 		return result;
 		
 	}
-	
-	public static void main(String[] args) throws IOException {
-		ABR_Reverse a = new ABR_Reverse();
-		a.Ajouter(5);
-		a.Ajouter(3);
-		a.Ajouter(4);
-		a.Ajouter(6);
-		a.Ajouter(1);
-		a.Ajouter(8);
-		a.Ajouter(10);
-		
-		System.out.println(a.AffichageInfixe());
-		
-		a.Supprimer(5);
-		
-		System.out.println(a.AffichageInfixe());
-		
-			
-		
-		
-	}
-	
 	
 
 }
