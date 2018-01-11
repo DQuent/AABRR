@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class ABR_Reverse {
 	
 	
-	private int valeur;
+	Integer valeur;
 	private ABR_Reverse SaG;
 	private ABR_Reverse SaD;
 	private boolean is_vide;
@@ -13,7 +13,7 @@ public class ABR_Reverse {
 	
 	//Constructeur 1
 	public ABR_Reverse(int valeur, ABR_Reverse saG, ABR_Reverse saD) {
-		this.valeur = valeur;
+		this.valeur = new Integer(valeur);
 		SaG = saG;
 		SaD = saD;
 		this.is_vide = false;
@@ -21,7 +21,7 @@ public class ABR_Reverse {
 	
 	//Constructeur 1
 	public ABR_Reverse(int valeur) {
-		this.valeur = valeur;
+		this.valeur = new Integer(valeur);
 		SaG = new ABR_Reverse();
 		SaD = new ABR_Reverse();
 		this.is_vide = false;
@@ -30,7 +30,7 @@ public class ABR_Reverse {
 	
 	//Constructeur 2
 	public ABR_Reverse() {
-		this.valeur = -1; 
+		this.valeur = null; 
 		SaG = null;
 		SaD = null;
 		this.is_vide= true;
@@ -38,16 +38,16 @@ public class ABR_Reverse {
 	
 	public void Ajouter(int val){
 		if(this.is_vide){
-			this.valeur = val;
+			this.valeur = new Integer(val);
 			this.is_vide = false;
 			this.SaD = new ABR_Reverse();
 			this.SaG = new ABR_Reverse();
 		}
 		else{
-			if(val <= this.valeur && this.SaD!=null){
+			if(val <= this.getValeur() && this.SaD!=null){
 				this.SaD.Ajouter(val);
 			}
-			else if(val > this.valeur && this.SaG!=null){
+			else if(val > this.getValeur() && this.SaG!=null){
 				this.SaG.Ajouter(val);
 			}
 		}
@@ -64,12 +64,12 @@ public class ABR_Reverse {
 	public boolean Supprimer(int val){
 		boolean result = false;
 		if(!is_vide){
-			if(val < this.valeur){
+			if(val < this.getValeur()){
 				result = this.SaD.Supprimer(val);
 			}
 			//si égalité
 			else{
-				if(val > this.valeur){
+				if(val > this.getValeur()){
 					result = this.SaG.Supprimer(val);
 				}
 				//on a trouver le noeud a supprimer
@@ -82,7 +82,7 @@ public class ABR_Reverse {
 					result = true;
 				}
 				else{
-					this.valeur = this.SaD.ExtraireMax();
+					this.setValeur(this.SaD.ExtraireMax());
 					return true;
 				}
 			}
@@ -93,7 +93,7 @@ public class ABR_Reverse {
 	//extraire la valeur maximum du fils gauche
 	public int ExtraireMax() {
 		if(this.SaG.is_vide){
-			int result= this.valeur;
+			int result= this.getValeur();
 			this.Recopie(this.SaD);
 			return result;
 		}
@@ -105,7 +105,7 @@ public class ABR_Reverse {
 	//extraire la valeur minimum du fils gauche d'un ABR
 	public int getMinABR() {
 		if(this.SaG.is_vide){
-			int result= this.valeur;
+			int result= this.getValeur();
 			return result;
 		}
 		else{
@@ -116,7 +116,7 @@ public class ABR_Reverse {
 	//extraire la valeur minimum du fils gauche d'un ABR
 	public int getMaxABR() {
 		if(this.SaD.is_vide){
-			int result= this.valeur;
+			int result= this.getValeur();
 			return result;
 		}
 		else{
@@ -134,26 +134,36 @@ public class ABR_Reverse {
 	}
 	
 	
-	public String AffichageInfixe(){
+	public String SousFonctionAffichageInfixe(){
 		String s ="";
 		if(!this.is_vide ){
 			if(this.SaG!=null && !this.SaG.is_vide){
-				s += "\n";
-				s += this.SaG.AffichageInfixe();
+				s += this.SaG.SousFonctionAffichageInfixe();
 			}
-			s += this.valeur+"|";
+			s += this.valeur+":";
 			if(this.SaG!=null && !this.SaD.is_vide){
-				s += "\n";
-				s += this.SaD.AffichageInfixe();
+				s += this.SaD.SousFonctionAffichageInfixe();
 			}
 		}
 		return s;
 	}
 	
+	public String AffichageInfixe(){
+		String s =this.SousFonctionAffichageInfixe();
+		if(s.length() > 1){
+			return s.substring(0, s.length() - 1);
+		}
+		else{
+			return s;
+		}
+	}
+	
 	public String AffichagePrefixe(){
 		String s ="";
-		s += this.valeur+":";
-		if(!this.is_vide ){
+		if(this.valeur != null){
+			s += this.valeur+":";			
+		}
+		if(!this.is_vide){
 			if(this.SaG!=null && !this.SaG.is_vide){
 				s += this.SaG.AffichagePrefixe();
 			}
@@ -166,12 +176,24 @@ public class ABR_Reverse {
 	
 	
 	
+	public boolean isIs_vide() {
+		return is_vide;
+	}
+
+	public void setIs_vide(boolean is_vide) {
+		this.is_vide = is_vide;
+	}
+
+	public void setValeur(Integer valeur) {
+		this.valeur = valeur;
+	}
+
 	//Getter and Setter
 	public int getValeur() {
-		return valeur;
+		return valeur.intValue();
 	}
 	public void setValeur(int valeur) {
-		this.valeur = valeur;
+		this.valeur = new Integer(valeur);
 	}
 	public ABR_Reverse getSaG() {
 		return SaG;
@@ -189,12 +211,12 @@ public class ABR_Reverse {
 	public boolean Search(int val) {
 		boolean result = false;
 		if(!is_vide){
-			if(val < this.valeur){
+			if(val < this.getValeur()){
 				result = this.SaD.Search(val);
 			}
 			//si égalité
 			else{
-				if(val > this.valeur){
+				if(val > this.getValeur()){
 					result = this.SaG.Search(val);
 				}
 				//on a trouver le noeud a supprimer
@@ -204,42 +226,21 @@ public class ABR_Reverse {
 			}
 		}
 		return result;
-	}	
-/*
-	public AABRR ABRtoAABRR(int k){
-		AABRR result = new AABRR();
-		int min = this.getMaxABR();
-		int max = this.getMinABR();
-		int taille_interval = (max-min)/k;
-		int tmp_min = min;
-		for(int i=0;i<k;i++){		
-			Noeud_AABRR tmp_n = new Noeud_AABRR(tmp_min,tmp_min+taille_interval);
-			//parcours arbre
-			
-			//
-		}
-		
-		return result;
-		
 	}
-	
-	
-	
-	//va ajouter dans result
-	public String checkInterval(int min, int max,int taille_interval, String result){
-		if(!is_vide){
-			if(min >= this.valeur && this.valeur < max){
-				result += this.valeur+';';
-				
-				
-			}
-			else if(this.valeur >= max){
-				result = this.SaD.checkInterval(max+1, max+taille_interval,taille_interval, result);
-			}
-			else{
-				result = this.SaG.checkInterval(max+1, max+taille_interval,taille_interval, result);
+	//return true si ABRR correct
+	public boolean is_ABRR_correct(){
+		String s = this.AffichageInfixe();
+		String[] s_tab = s.split(":");
+		int[] i_tab = new int[s_tab.length];;
+		
+		for(int i=0;i<s_tab.length-1;i++){
+			i_tab[i] = Integer.parseInt(s_tab[i]);
+			if(i_tab[i]<i_tab[i+1]){
+				return false;
 			}
 		}
-		return result;
-	}*/
+		
+		return true;
+	}
+
 }

@@ -129,32 +129,52 @@ public class ABR {
 	}
 	
 	
-	public String AffichageInfixe(){
+	public String sousFonctionAffichageInfixe(){
 		String s ="";
 		if(!this.is_vide ){
 			if(this.SaG!=null && !this.SaG.is_vide){
-				s += this.SaG.AffichageInfixe();
+				s += this.SaG.sousFonctionAffichageInfixe();
 			}
 			s += this.valeur+":";
 			if(this.SaD!=null && !this.SaD.is_vide){
-				s += this.SaD.AffichageInfixe();
+				s += this.SaD.sousFonctionAffichageInfixe();
+			}
+		}
+		return s;
+	}
+	
+	public String AffichageInfixe(){
+		String s =this.sousFonctionAffichageInfixe();
+		if(s.length() > 1){
+			return s.substring(0, s.length() - 1);
+		}
+		else{
+			return s;
+		}
+	}
+	
+	public String sousFonctionAffichagePrefixe(){
+		String s ="";
+		s += this.valeur+":";
+		if(!this.is_vide ){
+			if(this.SaG!=null && !this.SaG.is_vide){
+				s += this.SaG.sousFonctionAffichagePrefixe();
+			}
+			if(this.SaD!=null && !this.SaD.is_vide){
+				s += this.SaD.sousFonctionAffichagePrefixe();
 			}
 		}
 		return s;
 	}
 	
 	public String AffichagePrefixe(){
-		String s ="";
-		s += this.valeur+":";
-		if(!this.is_vide ){
-			if(this.SaG!=null && !this.SaG.is_vide){
-				s += this.SaG.AffichagePrefixe();
-			}
-			if(this.SaD!=null && !this.SaD.is_vide){
-				s += this.SaD.AffichagePrefixe();
-			}
+		String s = this.sousFonctionAffichagePrefixe();
+		if(s.length() > 1){
+			return s.substring(0, s.length() - 1);
 		}
-		return s;
+		else{
+			return s;
+		}
 	}
 	
 	
@@ -213,12 +233,12 @@ public class ABR {
 			Noeud_AABRR tmp_n = new Noeud_AABRR(tmp_min,tmp_min+taille_Interval); 
 			//Nombre de parcours ABR = nb d'Interval
 			for(int j=0;j<tab_valeurs.length;j++){	
-				if(Integer.parseInt(tab_valeurs[j]) >= tmp_min && Integer.parseInt(tab_valeurs[j]) <= tmp_min+taille_Interval){
+				if(Integer.valueOf(tab_valeurs[j]) != null  && Integer.parseInt(tab_valeurs[j]) >= tmp_min && Integer.parseInt(tab_valeurs[j]) <= tmp_min+taille_Interval){
 					tmp_n.Ajouter(Integer.parseInt(tab_valeurs[j]));
 				}
 			}	
 			//
-			if(result.getNoeud().min == -1 && result.getNoeud().max == -1){
+			if(result.getNoeud().min == null && result.getNoeud().max == null){
 				result.setNoeud(tmp_n);
 			}
 			result.AjouterNoeud(tmp_n);
@@ -228,4 +248,19 @@ public class ABR {
 		return result;
 		
 	}
+
+	public ABR AjouterToutLesElements(ABR_Reverse abr) {
+
+		if(!abr.isIs_vide()){
+			this.Ajouter(abr.getValeur());
+			if(abr.getSaG().valeur != null){
+				this.AjouterToutLesElements(abr.getSaG());
+			}
+			if(abr.getSaD().valeur != null){
+				this.AjouterToutLesElements(abr.getSaD());
+			}
+		}	
+		return this;
+	}
+	
 }

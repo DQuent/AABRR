@@ -43,11 +43,11 @@ public class AABRR {
 	//renvoie true si val a pu être ajouté, false sinon
 	public boolean Ajouter(int val){
 		boolean result = false;
-		if(val>= this.noeud.min && val<this.noeud.max){
+		if(val>= this.noeud.getMin() && val<=this.noeud.getMax()){
 			this.noeud.Ajouter(val); //ajoute au noeud
 			return true;
 		}
-		else if(val<=this.noeud.min){
+		else if(val<=this.noeud.getMin()){
 			if(SaG != null){
 				result = this.SaG.Ajouter(val); //ajoute a l'AABRR
 			}
@@ -55,7 +55,7 @@ public class AABRR {
 				return false;
 			}		
 		}
-		else if(val>this.noeud.max){
+		else if(val>this.noeud.getMax()){
 			if(SaD != null){
 				result = this.SaD.Ajouter(val);
 			}
@@ -70,19 +70,19 @@ public class AABRR {
 	public boolean is_NoeudJoint(Noeud_AABRR interval){
 		boolean result = false;
 		//cas 1 : interval qui dépasse a gauche
-		if(interval.min <= this.noeud.min && interval.max <= this.noeud.max && interval.max >= this.noeud.min){
+		if(interval.getMin() <= this.noeud.getMin() && interval.getMax() <= this.noeud.getMax() && interval.getMax() >= this.noeud.getMin()){
 			result = true;
 		}
 		//cas 2 : interval qui dépasse a droite
-		else if(interval.min >= this.noeud.min && interval.max >= this.noeud.max && interval.min <= this.noeud.max){
+		else if(interval.getMin() >= this.noeud.getMin() && interval.getMax() >= this.noeud.getMax() && interval.getMin() <= this.noeud.getMax()){
 			result = true;
 		}
 		// cas 3 : interval qui est inclu dans celui de l'AABRR
-		else if(interval.min >= this.noeud.min && interval.max <= this.noeud.max){
+		else if(interval.getMin() >= this.noeud.getMin() && interval.getMax() <= this.noeud.getMax()){
 			result = true;
 		}
 		//cas 4 : interval qui recouvre celui de l'AABRR
-		else if(interval.min <= this.noeud.min && interval.max >= this.noeud.max){
+		else if(interval.getMin() <= this.noeud.getMin() && interval.getMax() >= this.noeud.getMax()){
 			result = true;
 		}
 		if(this.SaD !=null && this.SaG !=null){
@@ -104,19 +104,20 @@ public class AABRR {
 	
 	//ajoute un noeud à l'AABRR
 	public boolean AjouterNoeud(Noeud_AABRR n){
+		//test si le noeud peut être ajouté
 		if (!this.is_NoeudJoint(n)) {
 			boolean result = false;
-			if (n.min > this.noeud.min) {
+			if (n.getMin() > this.noeud.getMin()) {
 				if (this.SaD == null) {
-					this.SaD = new AABRR(n.min, n.max);
+					this.SaD = new AABRR(n.getMin(), n.getMax());
 					this.SaD.noeud.abr = n.abr;
 					return true;
 				} else {
 					return this.SaD.AjouterNoeud(n);
 				}
-			} else if (n.min < this.noeud.min) {
+			} else if (n.getMin() < this.noeud.getMin()) {
 				if (this.SaG == null) {
-					this.SaG = new AABRR(n.min, n.max);
+					this.SaG = new AABRR(n.getMin(), n.getMax());
 					this.SaG.noeud.abr = n.abr;
 					return true;
 				} else {
@@ -126,18 +127,42 @@ public class AABRR {
 			return result;
 		}
 		else{
+			System.out.println("Le noeud ajouté n'est pas correct : il recouvre tout ou partie d'un des intervals de l'AABRR");
 			return false;
 		}
 	}
 	
+	//ajoute un noeud à l'AABRR
+		public boolean AjouterNoeudSansVerif(Noeud_AABRR n){
+				boolean result = false;
+				if (n.getMin() > this.noeud.getMin()) {
+					if (this.SaD == null) {
+						this.SaD = new AABRR(n.getMin(), n.getMax());
+						this.SaD.noeud.abr = n.abr;
+						return true;
+					} else {
+						return this.SaD.AjouterNoeud(n);
+					}
+				} else if (n.getMin() < this.noeud.getMin()) {
+					if (this.SaG == null) {
+						this.SaG = new AABRR(n.getMin(), n.getMax());
+						this.SaG.noeud.abr = n.abr;
+						return true;
+					} else {
+						return this.SaG.AjouterNoeud(n);
+					}
+				}
+				return result;
+		}
+	
 	public void Supprimer(int val){
-		if(val >= this.noeud.min){
-			if(val <= this.noeud.max){
+		if(val >= this.noeud.getMin()){
+			if(val <= this.noeud.getMax()){
 				if(this.noeud.Supprimer(val)){
 					System.out.println("Valeur supprimée.");
 				}
 				else{
-					System.out.println("L'interval ["+this.noeud.min+","+this.noeud.max+"] ne contient pas la valeur à supprimer.");
+					System.out.println("L'interval ["+this.noeud.getMin()+","+this.noeud.getMax()+"] ne contient pas la valeur à supprimer.");
 				}
 			}
 			else {
@@ -150,7 +175,7 @@ public class AABRR {
 				
 			}
 		}
-		else if(val<this.noeud.min){
+		else if(val<this.noeud.getMin()){
 			if(this.SaG != null){
 				this.SaG.Supprimer(val);
 			}
@@ -181,6 +206,122 @@ public class AABRR {
 			}
 	}
 	
+	public boolean Is_AABRR_correct(){
+		return this.is_ABR_sur_min() && !this.is_ToutNoeudJoint() && is_ToutNoeudIsABR();
+	}
+	
+	//renvoie true si un des noeud recouvre tout ou partie d'un autre
+	public boolean is_ToutNoeudJoint() {
+		if(this.SaD !=null && this.SaG !=null){
+			
+			//cas 1 : interval qui dépasse a gauche
+			if(this.SaG.noeud.getMin() <= this.noeud.getMin() && this.SaG.noeud.getMax() <= this.noeud.getMax() && this.SaG.noeud.getMax() >= this.noeud.getMin()){
+				return true;
+			}
+			//cas 2 : interval qui dépasse a droite
+			else if(this.SaD.noeud.getMin() >= this.noeud.getMin() && this.SaD.noeud.getMax() >= this.noeud.getMax() && this.SaD.noeud.getMin() <= this.noeud.getMax()){
+				return true;
+			}
+			// cas 3 : interval qui est inclu dans celui de l'AABRR
+			else if(this.SaD.noeud.getMin() >= this.noeud.getMin() && this.SaD.noeud.getMax() <= this.noeud.getMax()){
+				return true;
+			}
+			//cas 4 : interval qui recouvre celui de l'AABRR
+			else if(this.SaG.noeud.getMin() <= this.noeud.getMin() && this.SaG.noeud.getMax() >= this.noeud.getMax()){
+				return true;
+			}
+			return this.SaD.is_ToutNoeudJoint() || this.SaG.is_ToutNoeudJoint();
+		}
+		else if(this.SaD ==null && this.SaG !=null){
+			
+			//cas 1 : interval qui dépasse a gauche
+			if(this.SaG.noeud.getMin() <= this.noeud.getMin() && this.SaG.noeud.getMax() <= this.noeud.getMax() && this.SaG.noeud.getMax() >= this.noeud.getMin()){
+				return true;
+			}
+			//cas 4 : interval qui recouvre celui de l'AABRR
+			else if(this.SaG.noeud.getMin() <= this.noeud.getMin() && this.SaG.noeud.getMax() >= this.noeud.getMax()){
+				return true;
+			}
+			return this.SaG.is_ToutNoeudJoint();
+		}
+		else if(this.SaG ==null &&  this.SaD !=null){
+			//cas 2 : interval qui dépasse a droite
+			if(this.SaD.noeud.getMin() >= this.noeud.getMin() && this.SaD.noeud.getMax() >= this.noeud.getMax() && this.SaD.noeud.getMin() <= this.noeud.getMax()){
+				return true;
+			}
+			// cas 3 : interval qui est inclu dans celui de l'AABRR
+			else if(this.SaD.noeud.getMin() >= this.noeud.getMin() && this.SaD.noeud.getMax() <= this.noeud.getMax()){
+				return true;
+			}
+			return this.SaD.is_ToutNoeudJoint();
+		}
+		return false;		
+	}
+	
+	public boolean is_ToutNoeudIsABR() {
+		if(this.noeud.is_ABRR_vide()){
+			return true;
+		}
+		else{
+			if(this.SaD !=null && this.SaG !=null){
+				return this.SaG.is_ToutNoeudIsABR() && this.SaD.is_ToutNoeudIsABR() && this.noeud.is_ABRR_correct();
+			}
+			else if(this.SaD ==null && this.SaG ==null){
+				return this.noeud.abr.is_ABRR_correct();
+			}
+			else if(this.SaD ==null && this.SaG !=null){
+				return this.SaG.is_ToutNoeudIsABR() && this.noeud.is_ABRR_correct();
+			}
+			else if(this.SaG ==null &&  this.SaD !=null){
+				return this.SaD.is_ToutNoeudIsABR() && this.noeud.is_ABRR_correct();
+			}
+			else{
+				return true;
+			}
+		}
+		
+	}
+	
+	
+	
+	
+	public String AffichageInfixeSurMin(){
+		String s =this.SousFonctionAffichageInfixeSurMin();
+		if(s.length() > 1){
+			return s.substring(0, s.length() - 1);
+		}
+		else{
+			return s;
+		}
+	}
+	
+	public String SousFonctionAffichageInfixeSurMin(){
+		String s ="";
+		if(this.SaG!=null ){
+			s += this.SaG.AffichageInfixeSurMin();
+		}
+		s += this.noeud.getMin()+":";
+		if(this.SaD!=null){
+			s += this.SaD.AffichageInfixeSurMin();
+		}
+		return s;
+	}
+	
+	public boolean is_ABR_sur_min() {
+		String s = this.AffichageInfixeSurMin();
+		String[] s_tab = s.split(":");
+		int[] i_tab = new int[s_tab.length];;
+		
+		for(int i=0;i<s_tab.length-1;i++){
+			i_tab[i] = Integer.parseInt(s_tab[i]);
+			if(i_tab[i]>i_tab[i+1]){
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	// Problème : créer l'arbre en Ajoutant successivement les valeurs des noeuds. 
 	public AABRR CreateAABRRfromFile(String name, String folder) throws IOException{
 		BufferedReader br;
 		AABRR result = new AABRR();
@@ -198,12 +339,14 @@ public class AABRR {
 			
 			s_liste_noeud_abrr = s_noeud[1].split(":");	
 			for(int i=0;i<s_liste_noeud_abrr.length;i++){
-				tmp_noeud.Ajouter(Integer.parseInt(s_liste_noeud_abrr[i]));
+				if(s_liste_noeud_abrr[i] != null){
+					tmp_noeud.Ajouter(Integer.parseInt(s_liste_noeud_abrr[i]));
+				}	
 			}
-			if(result.noeud.min == -1 && result.noeud.max == -1){
+			if(result.noeud.min == null && result.noeud.max == null){
 				result.noeud = tmp_noeud;
 			}
-			result.AjouterNoeud(tmp_noeud);
+			result.AjouterNoeudSansVerif(tmp_noeud);
 		}
 		br.close();
 		return result;
@@ -211,8 +354,8 @@ public class AABRR {
 	
 	public boolean Search(int val){
 		boolean result = false;
-		if(val >= this.noeud.min){
-			if(val < this.noeud.max){
+		if(val >= this.noeud.getMin()){
+			if(val < this.noeud.getMax()){
 				if(this.noeud.Search(val)){
 					result = true;
 				}
@@ -230,7 +373,7 @@ public class AABRR {
 				
 			}
 		}
-		else if(val<this.noeud.min){
+		else if(val<this.noeud.getMin()){
 			if(this.SaG != null){
 				result= this.SaG.Search(val);
 			}
@@ -278,5 +421,25 @@ public class AABRR {
 		}
 		return s;
 	}
+	
+	public ABR AABRRtoABR(ABR result){
+		if(!this.noeud.is_ABRR_vide()){
+			result.AjouterToutLesElements(this.noeud.abr);
+		}
+		if(this.SaD == null && this.SaG != null){
+			this.SaG.AABRRtoABR(result);
+		}
+		if(this.SaD != null && this.SaG == null){
+			this.SaD.AABRRtoABR(result);
+		}
+		if(this.SaD != null && this.SaG != null){
+			this.SaG.AABRRtoABR(result);
+			this.SaD.AABRRtoABR(result);
+		}
+		return result;
+		
+	}
+	
+	
 
 }
