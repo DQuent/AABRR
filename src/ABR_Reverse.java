@@ -105,24 +105,24 @@ public class ABR_Reverse {
 	}
 	
 	//extraire la valeur minimum du fils gauche d'un ABR
-	public int getMinABR() {
+	public int getMin() {
 		if(this.SaG.is_vide){
 			int result= this.getValeur();
 			return result;
 		}
 		else{
-			return this.SaG.getMinABR();
+			return this.SaG.getMin();
 		}
 	}
 	
 	//extraire la valeur minimum du fils gauche d'un ABR
-	public int getMaxABR() {
+	public int getMax() {
 		if(this.SaD.is_vide){
 			int result= this.getValeur();
 			return result;
 		}
 		else{
-			return this.SaD.getMaxABR();
+			return this.SaD.getMax();
 		}
 	}
 

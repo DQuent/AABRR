@@ -156,46 +156,53 @@ public class AABRR {
 				return result;
 		}
 	
-	public void Supprimer(int val){
+	public boolean Supprimer(int val){
+		boolean result = false;
 		if(val >= this.noeud.getMin()){
 			if(val <= this.noeud.getMax()){
-				if(this.noeud.Supprimer(val)){
+				result = this.noeud.Supprimer(val);
+				if(result){
 					System.out.println("Valeur supprimée.");
+					result = true;
 				}
 				else{
 					System.out.println("L'interval ["+this.noeud.getMin()+","+this.noeud.getMax()+"] ne contient pas la valeur à supprimer.");
+					result = false;
 				}
 			}
 			else {
 				if(this.SaD != null){
-					this.SaD.Supprimer(val);
+					result = this.SaD.Supprimer(val);
 				}
 				else{
 					System.out.println("Aucun interval ne contient la valeur à supprimer");
+					result = false;
 				}
 				
 			}
 		}
 		else if(val<this.noeud.getMin()){
 			if(this.SaG != null){
-				this.SaG.Supprimer(val);
+				result = this.SaG.Supprimer(val);
 			}
 			else{
 				System.out.println("Aucun interval de contient la valeur à supprimer");
+				result = false;
 			}	
 		}
+		return result;
 	}
 	
 	public void SaveAABRR(String name, String folder){
 		try {
 			  File file = new File(folder+"/"+name);
-			    if (file.exists() && file.isDirectory() ) {
+			    if (file.exists() ) {
 			         /* chemin est correct */
 			    	BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 			    	writer.write(this.Affichage());
 			    	writer.close();
 			    } else {
-			    	BufferedWriter writer = new BufferedWriter(new FileWriter(new File( "/home/delanou/workspace/AABRR/AABRR/Folder_output"+"/"+name)));
+			    	BufferedWriter writer = new BufferedWriter(new FileWriter(new File( "../Folder_output"+"/"+name)));
 			    	writer.write(this.Affichage());
 			    	writer.close();
 			    	
@@ -323,11 +330,11 @@ public class AABRR {
 	}
 	
 	// Problème : créer l'arbre en Ajoutant successivement les valeurs des noeuds. Cependant ne vérifie pas la validité du chemin préfixe de l'ABRR des noeuds
-	public AABRR CreateAABRRfromFile(String name, String folder) throws IOException{
+	public AABRR sousFonctionCreateAABRRfromFile(File file) throws IOException{
 		BufferedReader br;
 		AABRR result = new AABRR();
 		
-		br = new BufferedReader(new FileReader(new File(folder+'/'+name)));
+		br = new BufferedReader(new FileReader(file));
 		String line;
 		String[] s_noeud;
 		String[] s_min_max;
@@ -351,6 +358,24 @@ public class AABRR {
 		}
 		br.close();
 		return result;
+	}
+	
+	public AABRR CreateAABRRfromFile(String name, String folder){
+		try {
+			  File file = new File(folder+"/"+name);
+			    if (file.exists() ) {
+			         /* chemin est correct */
+			    	return this.sousFonctionCreateAABRRfromFile(file);
+			    } else {
+			    	File file2 = new File("../Folder_input"+"/"+name);
+			    	return this.sousFonctionCreateAABRRfromFile(file2);
+			    }	
+			}
+			catch (IOException e)
+			{
+			e.printStackTrace();
+			}
+		return null;
 	}
 	
 	public boolean Search(int val){
