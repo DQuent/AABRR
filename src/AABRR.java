@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Scanner;
 
 
 public class AABRR {
@@ -321,7 +322,7 @@ public class AABRR {
 		return true;
 	}
 	
-	// Problème : créer l'arbre en Ajoutant successivement les valeurs des noeuds. 
+	// Problème : créer l'arbre en Ajoutant successivement les valeurs des noeuds. Cependant ne vérifie pas la validité du chemin préfixe de l'ABRR des noeuds
 	public AABRR CreateAABRRfromFile(String name, String folder) throws IOException{
 		BufferedReader br;
 		AABRR result = new AABRR();
@@ -437,6 +438,27 @@ public class AABRR {
 			this.SaD.AABRRtoABR(result);
 		}
 		return result;
+		
+	}
+	
+	public static void main(String[] args) throws IOException {
+		ABR_Reverse a = new ABR_Reverse();
+		a.Ajouter(5);
+		a.Ajouter(3);
+		a.Ajouter(4);
+		a.Ajouter(6);
+		a.Ajouter(1);
+		a.Ajouter(8);
+		a.Ajouter(10);
+		
+		System.out.println(a.AffichageInfixe());
+		
+		a.Supprimer(5);
+		
+		System.out.println(a.AffichageInfixe());
+		
+			
+		
 		
 	}
 	

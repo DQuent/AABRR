@@ -73,17 +73,19 @@ public class ABR_Reverse {
 					result = this.SaG.Supprimer(val);
 				}
 				//on a trouver le noeud a supprimer
+				//un seul fils : SaG
 				else if(this.SaD.is_vide){
 					this.Recopie(this.SaG);
 					result = true;
 				}
+				//un seul fils : SaG
 				else if(this.SaG.is_vide){
 					this.Recopie(this.SaD);
 					result = true;
 				}
-				else{
-					this.setValeur(this.SaD.ExtraireMax());
-					return true;
+				else{//si noeud posssède deux fils
+					this.setValeur(this.SaD.ExtraireMax()); //extraire et supprime la valeur
+					result = true;
 				}
 			}
 		}
@@ -219,7 +221,6 @@ public class ABR_Reverse {
 				if(val > this.getValeur()){
 					result = this.SaG.Search(val);
 				}
-				//on a trouver le noeud a supprimer
 				else{
 					result = true;
 				}
