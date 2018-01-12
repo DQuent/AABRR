@@ -31,6 +31,7 @@ public class ABR {
 		this.is_vide= true;
 	}
 	
+	// Ajoute val à l'ABR
 	public void Ajouter(int val){
 		if(this.is_vide){
 			this.valeur = new Integer(val);
@@ -48,6 +49,7 @@ public class ABR {
 		}
 	}
 	
+	//Recopie l'ABR en entrée dans le noeud courant
 	public void Recopie(ABR abr){
 		this.valeur = abr.valeur;
 		this.is_vide = abr.is_vide;
@@ -108,7 +110,7 @@ public class ABR {
 		}
 	}
 	
-	//extraire la valeur minimum du fils gauche d'un ABR
+	//Extraire la valeur minimum du fils gauche d'un ABR
 	public Integer getMaxABR() {
 		if(this.SaG.is_vide){
 			Integer result= this.valeur;
@@ -119,6 +121,7 @@ public class ABR {
 		}
 	}
 
+	//Retourne vrai si le noeud est une feuille
 	public boolean is_Feuille(){
 		if(this.SaG ==  null && this.SaD == null){
 			return true;
@@ -128,7 +131,7 @@ public class ABR {
 		}
 	}
 	
-	
+	//Retourne l'affichage infixe avec ':' à la fin
 	public String sousFonctionAffichageInfixe(){
 		String s ="";
 		if(!this.is_vide ){
@@ -143,6 +146,7 @@ public class ABR {
 		return s;
 	}
 	
+	// Encapsule sousFonctionAffichageInfixe, Retourne l'affichage Infixe de l'ABR sans le ':' à la fin
 	public String AffichageInfixe(){
 		String s =this.sousFonctionAffichageInfixe();
 		if(s.length() > 1){
@@ -153,6 +157,7 @@ public class ABR {
 		}
 	}
 	
+	//Retourne l'affichage préfixe avec ':' à la fin
 	public String sousFonctionAffichagePrefixe(){
 		String s ="";
 		s += this.valeur+":";
@@ -167,6 +172,7 @@ public class ABR {
 		return s;
 	}
 	
+	// Encapsule sousFonctionAffichagePrefixe, Retourne l'affichage Préfixe de l'ABR sans le ':' à la fin
 	public String AffichagePrefixe(){
 		String s = this.sousFonctionAffichagePrefixe();
 		if(s.length() > 1){
@@ -177,6 +183,79 @@ public class ABR {
 		}
 	}
 	
+	
+	//Retourne vrai si val est dans l'ABR
+	public boolean Search(int val) {
+		boolean result = false;
+		if(!is_vide){
+			if(val < this.valeur.intValue()){
+				result = this.SaG.Search(val);
+			}
+			//si égalité
+			else{
+				if(val > this.valeur.intValue()){
+					result = this.SaD.Search(val);
+				}
+				//on a trouver le noeud a supprimer
+				else{
+					result = true;
+				}
+			}
+		}
+		return result;
+	}	
+
+	// Retourne l'AABRR correspondant à l'ABR, k étant le nombre d'interval de celui-ci
+	public AABRR ABRtoAABRR(int k){
+		AABRR result = new AABRR();
+		Integer min = this.getMaxABR();
+		Integer max = this.getMinABR();
+		
+		Float f =  (float) Math.ceil((max.intValue()-min.intValue())/k);
+		int taille_Interval= f.intValue() + 1;
+		
+		int tmp_min = min.intValue();
+		String s_tmp = this.AffichageInfixe();
+		String[] tab_valeurs = s_tmp.split(":");
+		
+		
+		for(int i=0;i<k;i++){		
+			Noeud_AABRR tmp_n = new Noeud_AABRR(tmp_min,tmp_min+taille_Interval); 
+			//Nombre de parcours ABR = nb d'Interval
+			for(int j=0;j<tab_valeurs.length;j++){	
+				if(Integer.valueOf(tab_valeurs[j]) != null  && Integer.parseInt(tab_valeurs[j]) >= tmp_min && Integer.parseInt(tab_valeurs[j]) <= tmp_min+taille_Interval){
+					tmp_n.Ajouter(Integer.parseInt(tab_valeurs[j]));
+				}
+			}	
+			//premier noeud
+			if(result.getNoeud().min == null && result.getNoeud().max == null){
+				result.setNoeud(tmp_n);
+			}
+			//le reste
+			else{
+				result.AjouterNoeud(tmp_n);
+			}
+			tmp_min += taille_Interval+1;
+		}
+		
+		return result;
+		
+	}
+	
+	//Ajoute tout les éléments de l'ABRR en entrée à l'ABR et retourne l'ABR
+	public ABR AjouterToutLesElements(ABR_Reverse abr) {
+
+		if(!abr.isIs_vide()){
+			this.Ajouter(abr.getValeur());
+			if(abr.getSaG().valeur != null){
+				this.AjouterToutLesElements(abr.getSaG());
+			}
+			if(abr.getSaD().valeur != null){
+				this.AjouterToutLesElements(abr.getSaD());
+			}
+		}	
+		return this;
+	}
 	
 	
 	//Getter and Setter
@@ -198,74 +277,4 @@ public class ABR {
 	public void setSaD(ABR saD) {
 		SaD = saD;
 	}
-
-	public boolean Search(int val) {
-		boolean result = false;
-		if(!is_vide){
-			if(val < this.valeur.intValue()){
-				result = this.SaG.Search(val);
-			}
-			//si égalité
-			else{
-				if(val > this.valeur.intValue()){
-					result = this.SaD.Search(val);
-				}
-				//on a trouver le noeud a supprimer
-				else{
-					result = true;
-				}
-			}
-		}
-		return result;
-	}	
-
-	public AABRR ABRtoAABRR(int k){
-		AABRR result = new AABRR();
-		Integer min = this.getMaxABR();
-		Integer max = this.getMinABR();
-		
-		Float f =  (float) Math.ceil((max.intValue()-min.intValue())/k);
-		int taille_Interval= f.intValue() + 1;
-		
-		 
-		System.out.println(String.valueOf(taille_Interval));
-		int tmp_min = min.intValue();
-		String s_tmp = this.AffichageInfixe();
-		String[] tab_valeurs = s_tmp.substring(0, s_tmp.length() - 1).split(":");
-		
-		
-		for(int i=0;i<k;i++){		
-			Noeud_AABRR tmp_n = new Noeud_AABRR(tmp_min,tmp_min+taille_Interval); 
-			//Nombre de parcours ABR = nb d'Interval
-			for(int j=0;j<tab_valeurs.length;j++){	
-				if(Integer.valueOf(tab_valeurs[j]) != null  && Integer.parseInt(tab_valeurs[j]) >= tmp_min && Integer.parseInt(tab_valeurs[j]) <= tmp_min+taille_Interval){
-					tmp_n.Ajouter(Integer.parseInt(tab_valeurs[j]));
-				}
-			}	
-			//
-			if(result.getNoeud().min == null && result.getNoeud().max == null){
-				result.setNoeud(tmp_n);
-			}
-			result.AjouterNoeud(tmp_n);
-			tmp_min += taille_Interval+1;
-		}
-		
-		return result;
-		
-	}
-
-	public ABR AjouterToutLesElements(ABR_Reverse abr) {
-
-		if(!abr.isIs_vide()){
-			this.Ajouter(abr.getValeur());
-			if(abr.getSaG().valeur != null){
-				this.AjouterToutLesElements(abr.getSaG());
-			}
-			if(abr.getSaD().valeur != null){
-				this.AjouterToutLesElements(abr.getSaD());
-			}
-		}	
-		return this;
-	}
-	
 }

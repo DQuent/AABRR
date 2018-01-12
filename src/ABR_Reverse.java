@@ -36,6 +36,7 @@ public class ABR_Reverse {
 		this.is_vide= true;
 	}
 	
+	//Permet d'ajouter val à l'ABRR
 	public void Ajouter(int val){
 		if(this.is_vide){
 			this.valeur = new Integer(val);
@@ -53,6 +54,7 @@ public class ABR_Reverse {
 		}
 	}
 	
+	// Ajoute val à l'ABRR
 	public void Recopie(ABR_Reverse abr){
 		this.valeur = abr.valeur;
 		this.is_vide = abr.is_vide;
@@ -125,7 +127,8 @@ public class ABR_Reverse {
 			return this.SaD.getMax();
 		}
 	}
-
+	
+	//Renvoie true si le noeud de l'arbre est une feuille
 	public boolean is_Feuille(){
 		if(this.SaD ==  null && this.SaG == null){
 			return true;
@@ -135,7 +138,7 @@ public class ABR_Reverse {
 		}
 	}
 	
-	
+	//Permet l'affichage infixe+':'
 	public String SousFonctionAffichageInfixe(){
 		String s ="";
 		if(!this.is_vide ){
@@ -150,6 +153,7 @@ public class ABR_Reverse {
 		return s;
 	}
 	
+	//Encapsule SousFonctionAffichageInfixe et permet l'affichageInfixe de l'ABRR sans le ':' final
 	public String AffichageInfixe(){
 		String s =this.SousFonctionAffichageInfixe();
 		if(s.length() > 1){
@@ -160,6 +164,7 @@ public class ABR_Reverse {
 		}
 	}
 	
+	//Permet l'Affichage Préfixe+':'
 	public String AffichagePrefixe(){
 		String s ="";
 		if(this.valeur != null){
@@ -176,40 +181,7 @@ public class ABR_Reverse {
 		return s;
 	}
 	
-	
-	
-	public boolean isIs_vide() {
-		return is_vide;
-	}
-
-	public void setIs_vide(boolean is_vide) {
-		this.is_vide = is_vide;
-	}
-
-	public void setValeur(Integer valeur) {
-		this.valeur = valeur;
-	}
-
-	//Getter and Setter
-	public int getValeur() {
-		return valeur.intValue();
-	}
-	public void setValeur(int valeur) {
-		this.valeur = new Integer(valeur);
-	}
-	public ABR_Reverse getSaG() {
-		return SaG;
-	}
-	public void setSaG(ABR_Reverse saG) {
-		SaG = saG;
-	}
-	public ABR_Reverse getSaD() {
-		return SaD;
-	}
-	public void setSaD(ABR_Reverse saD) {
-		SaD = saD;
-	}
-
+	//Retourne vrai si la valeur est dans l'ABRR
 	public boolean Search(int val) {
 		boolean result = false;
 		if(!is_vide){
@@ -228,7 +200,8 @@ public class ABR_Reverse {
 		}
 		return result;
 	}
-	//return true si ABRR correct
+	
+	//Retourne true si ABRR correct
 	public boolean is_ABRR_correct(){
 		String s = this.AffichageInfixe();
 		String[] s_tab = s.split(":");
@@ -243,5 +216,38 @@ public class ABR_Reverse {
 		
 		return true;
 	}
+	
+	//Getter and Setter
+	
+		public boolean isIs_vide() {
+			return is_vide;
+		}
+
+		public void setIs_vide(boolean is_vide) {
+			this.is_vide = is_vide;
+		}
+
+		public void setValeur(Integer valeur) {
+			this.valeur = valeur;
+		}
+		
+		public int getValeur() {
+			return valeur.intValue();
+		}
+		public void setValeur(int valeur) {
+			this.valeur = new Integer(valeur);
+		}
+		public ABR_Reverse getSaG() {
+			return SaG;
+		}
+		public void setSaG(ABR_Reverse saG) {
+			SaG = saG;
+		}
+		public ABR_Reverse getSaD() {
+			return SaD;
+		}
+		public void setSaD(ABR_Reverse saD) {
+			SaD = saD;
+		}
 
 }
