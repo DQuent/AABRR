@@ -345,6 +345,7 @@ public class AABRR {
 		String[] s_min_max;
 		String[] s_liste_noeud_abrr;
 		while ((line = br.readLine()) != null) {
+			line = AABRR.Repair_Line(line); //repare la ligne et enlève tout les charactères non prévu
 			
 			s_noeud = line.split(";");
 			s_min_max = s_noeud[0].split(":");
@@ -365,6 +366,13 @@ public class AABRR {
 		return result;
 	}
 	
+	private static String Repair_Line(String line) {
+		String pattern = "(?:(?!([0-9]|:|;)).)";
+		line = java.util.regex.Pattern.compile(pattern).matcher(line).replaceAll("");
+		System.out.println(line);
+		return line;
+	}
+
 	public AABRR CreateAABRRfromFile(String name, String folder){
 		try {
 			  File file = new File(folder+"/"+name);

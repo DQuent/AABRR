@@ -4,6 +4,18 @@ import java.util.Scanner;
 
 public class Application {
 
+	
+	
+	private static boolean check_input(String val) {
+		String pattern = "([0-9])*";
+		if(val.length() == 0){
+			return false;
+		}
+		else{
+			return java.util.regex.Pattern.compile(pattern).matcher(val).matches();
+		}
+	}
+	
 	/**
 	 * @param args
 	 * @throws IOException 
@@ -102,12 +114,20 @@ public class Application {
 						else{
 							System.out.println("Vous avez choisi 6");
 							System.out.println("Quelle valeur voulez-vous rechercher ?");
-							int val_recherche  = sc.nextInt();
-							if(aabrr.Search(val_recherche)){
-								System.out.println("La valeur "+String.valueOf(val_recherche) +" est dans l'AABRR");
+							String s_val_recherche  = sc.nextLine();
+							
+							
+							if(Application.check_input(s_val_recherche)){
+								int val_recherche = Integer.parseInt(s_val_recherche);
+								if(aabrr.Search(val_recherche)){
+									System.out.println("La valeur "+String.valueOf(val_recherche) +" est dans l'AABRR");
+								}
+								else{
+									System.out.println("La valeur "+String.valueOf(val_recherche) +" n'est pas dans l'AABRR");
+								}
 							}
 							else{
-								System.out.println("La valeur "+String.valueOf(val_recherche) +" n'est pas dans l'AABRR");
+								System.out.println("La valeur "+String.valueOf(s_val_recherche) +" n'est pas correcte");
 							}
 						}
 						break;
@@ -118,12 +138,19 @@ public class Application {
 						else{
 							System.out.println("Vous avez choisi 7");
 							System.out.println("Quelle valeur voulez-vous supprimer ?");
-							int val_supp  = sc.nextInt();
-							if(aabrr.Supprimer(val_supp)){
-								System.out.println("La valeur "+String.valueOf(val_supp) +" est dans l'AABRR et à été supprimée");
+							String s_val_supp  = sc.nextLine();
+							
+							if(Application.check_input(s_val_supp)){
+								int val_supp = Integer.parseInt(s_val_supp);
+								if(aabrr.Supprimer(val_supp)){
+									System.out.println("La valeur "+String.valueOf(val_supp) +" est dans l'AABRR et à été supprimée");
+								}
+								else{
+									System.out.println("La valeur "+String.valueOf(val_supp) +" n'est pas dans l'AABRR, aucune suppression n'as été effectuée");
+								}
 							}
 							else{
-								System.out.println("La valeur "+String.valueOf(val_supp) +" n'est pas dans l'AABRR, aucune suppression n'as été effectuée");
+								System.out.println("La valeur "+s_val_supp +" n'est pas correcte");
 							}
 						}
 						break;
@@ -134,21 +161,39 @@ public class Application {
 						else{
 							System.out.println("Vous avez choisi 8");
 							System.out.println("Quelle valeur voulez-vous insérer ?");
-							int val_ins  = sc.nextInt();
-							if(aabrr.Ajouter(val_ins)){
-								System.out.println("La valeur "+String.valueOf(val_ins) +" a été ajoutée à l'AABRR");
+							String s_val_ins  = sc.nextLine();
+							
+							if(Application.check_input(s_val_ins)){
+								int val_ins  = Integer.parseInt(s_val_ins);
+								if(aabrr.Ajouter(val_ins)){
+									System.out.println("La valeur "+String.valueOf(val_ins) +" a été ajoutée à l'AABRR");
+								}
+								else{
+									System.out.println("La valeur "+String.valueOf(val_ins) +" n'a pas été ajoutée");
+								}
 							}
 							else{
-								System.out.println("La valeur "+String.valueOf(val_ins) +" n'a pas été ajoutée");
+								System.out.println("La valeur "+s_val_ins+" n'est pas valide");
+
 							}
+							
+							
 						}
 						break;
 					case "9":
 						System.out.println("Vous avez choisi 9");
 						System.out.println("Quelle valeur voulez-vous insérer dans l'ABR?");
-						int val_ins2  = sc.nextInt();
-						abr.Ajouter(val_ins2);
-						System.out.println("La valeur "+String.valueOf(val_ins2) +" a été ajoutée à l'ABR");
+						String s_val_ins2  = sc.nextLine();
+						
+						if(Application.check_input(s_val_ins2)){
+							int val_ins2  = Integer.parseInt(s_val_ins2);
+							abr.Ajouter(val_ins2);
+							System.out.println("La valeur "+String.valueOf(val_ins2) +" a été ajoutée à l'ABR");	
+						}
+						else{
+							System.out.println("La valeur "+s_val_ins2 +" n'est pas une entrée valide");	
+
+						}
 						break;
 					case "10":
 						
@@ -158,9 +203,18 @@ public class Application {
 						else{
 							System.out.println("Vous avez choisi 10");
 							System.out.println("Quelle valeur voulez-vous supprimer dans l'ABR ?");
-							int val_supp2  = sc.nextInt();
-							abr.Supprimer(val_supp2);
-							System.out.println("La valeur "+String.valueOf(val_supp2) +" a été supprimée à l'ABR");
+							String s_val_supp2  = sc.nextLine();
+							
+							if(Application.check_input(s_val_supp2)){
+								int val_supp2  = Integer.parseInt(s_val_supp2);
+								abr.Supprimer(val_supp2);
+								System.out.println("La valeur "+String.valueOf(val_supp2) +" a été supprimée à l'ABR");
+							}
+							else{
+								System.out.println("La valeur "+String.valueOf(s_val_supp2) +" n'est pas correcte");
+
+							}
+							
 						}
 						break;
 					case "11":
@@ -171,13 +225,21 @@ public class Application {
 						else{
 							System.out.println("Vous avez choisi 11");
 							System.out.println("En combien d'interval voulez-vous que l'ABR soit fractionné ?");
-							int k = sc.nextInt();
-							ABR tmp_abr = abr;
-							AABRR tmp_aabrr = tmp_abr.ABRtoAABRR(k);
-							System.out.println("Voici l'AABRR obtenu (l'AABRR en cours n'as pas été modifié) :");
-							System.out.println(tmp_aabrr.Affichage());
-							tmp_abr = new ABR();
-							tmp_aabrr = new AABRR();
+							String s_k = sc.nextLine();
+							
+							if(Application.check_input(s_k)){
+								int k = Integer.parseInt(s_k);
+								ABR tmp_abr = abr;
+								AABRR tmp_aabrr = tmp_abr.ABRtoAABRR(k);
+								System.out.println("Voici l'AABRR obtenu (l'AABRR en cours n'as pas été modifié) :");
+								System.out.println(tmp_aabrr.Affichage());
+								tmp_abr = new ABR();
+								tmp_aabrr = new AABRR();
+							}
+							else{
+								System.out.println("La valeur "+String.valueOf(s_k) +" n'est pas correcte");
+							}
+							
 						}
 						break;
 					case "12":
